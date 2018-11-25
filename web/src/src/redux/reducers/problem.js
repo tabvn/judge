@@ -1,27 +1,22 @@
 import { OrderedMap } from 'immutable'
-import { REMOVE_USER, SET_USER } from '../types'
+import { SET_PROBLEM } from '../types'
 
 const initState = {
-  models: new OrderedMap(),
+  models: new OrderedMap()
 }
-
 export default (state = initState, action) => {
 
   switch (action.type) {
 
-    case SET_USER:
+    case SET_PROBLEM:
 
       return {
         ...state,
         models: state.models.set(action.payload.id, action.payload)
       }
 
-    case REMOVE_USER:
-      return {
-        ...state,
-        models: state.models.delete(action.payload)
-      }
     default:
       return state
   }
+
 }

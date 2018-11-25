@@ -2,7 +2,7 @@ import thunk from 'redux-thunk'
 import { createStore, applyMiddleware } from 'redux'
 import reducers from './reducers'
 import Service from '../service'
-import { RELOAD, SET_CURRENT_USER, SET_TOKEN } from './types'
+import { RELOAD } from './types'
 import { loadAppData } from './actions'
 
 const service = new Service()
@@ -15,6 +15,7 @@ const token = localStorage.getItem('loginToken')
 if (token) {
   try {
     const tokenJson = JSON.parse(token)
+    service.setToken(tokenJson)
     store.dispatch({
       type: RELOAD,
       payload: {

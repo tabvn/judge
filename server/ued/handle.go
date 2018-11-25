@@ -139,3 +139,19 @@ func CreateProblem(w http.ResponseWriter, r *http.Request) {
 	json.NewEncoder(w).Encode(problem)
 
 }
+
+func HandleGetProblem(w http.ResponseWriter, r *http.Request) {
+
+	params := mux.Vars(r)
+	problemId := GetId(params["id"])
+
+	problem := GetProblem(problemId)
+	if problem != nil {
+		w.Header().Set("Content-Type", "application/json")
+		json.NewEncoder(w).Encode(problem)
+
+		return
+	}
+	HandleErrorResponse(w, ErrorResponse{error: "Not found", code: http.StatusNotFound})
+
+}

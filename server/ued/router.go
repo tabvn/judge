@@ -10,4 +10,5 @@ func AppRouters(router *mux.Router) {
 	router.HandleFunc("/api/logout", HandleSignOut).Methods("POST")
 	router.HandleFunc("/api/users/{id:[0-9]+}", UpdateUser).Methods("PUT")
 	router.HandleFunc("/api/problems", CreateProblem).Methods("POST")
+	router.HandleFunc("/api/problems/{id:[0-9]+}", HandleGetProblem).Methods("GET")
 }
