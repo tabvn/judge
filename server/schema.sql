@@ -150,7 +150,7 @@ CREATE TABLE `problems` (
   KEY `file_id` (`file_id`),
   CONSTRAINT `problems_ibfk_1` FOREIGN KEY (`user_id`) REFERENCES `users` (`id`),
   CONSTRAINT `problems_ibfk_2` FOREIGN KEY (`file_id`) REFERENCES `files` (`id`) ON DELETE SET NULL
-) ENGINE=InnoDB AUTO_INCREMENT=27 DEFAULT CHARSET=utf8mb4;
+) ENGINE=InnoDB AUTO_INCREMENT=28 DEFAULT CHARSET=utf8mb4;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -159,7 +159,7 @@ CREATE TABLE `problems` (
 
 LOCK TABLES `problems` WRITE;
 /*!40000 ALTER TABLE `problems` DISABLE KEYS */;
-INSERT INTO `problems` VALUES (11,'Fairplay updated',9,'Desc','In','Out',28,1543149865),(12,'New problem',9,'','','',29,1543157584),(13,'Test problem',9,'','','',30,1543157657),(16,'aaaa',9,'','','',NULL,1543157790),(22,'fsdafsaf',9,'','','',NULL,1543158129),(23,'testdsafsafas',9,'','','',NULL,1543158679),(24,'fsafa',9,'','','',NULL,1543158692);
+INSERT INTO `problems` VALUES (11,'Fairplay updated',9,'Desc','In','Out',28,1543149865),(12,'New problem',9,'','','',29,1543157584),(13,'Test problem',9,'','','',30,1543157657),(16,'aaaa',9,'','','',NULL,1543157790),(22,'fsdafsaf',9,'','','',NULL,1543158129),(23,'testdsafsafas',9,'','','',NULL,1543158679),(24,'fsafa',9,'','','',NULL,1543158692),(27,'Tabvn',9,'fsfa','','',NULL,1543161201);
 /*!40000 ALTER TABLE `problems` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -317,12 +317,15 @@ DROP TABLE IF EXISTS `tests`;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `tests` (
   `id` int(11) unsigned NOT NULL AUTO_INCREMENT,
-  `problem_id` int(11) DEFAULT NULL,
-  `strength` int(11) DEFAULT NULL,
+  `problem_id` int(11) unsigned NOT NULL,
+  `strength` int(11) DEFAULT '10',
   `active` tinyint(1) DEFAULT '1',
   `sample` tinyint(1) DEFAULT '0',
-  PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+  `created` int(11) DEFAULT '0',
+  PRIMARY KEY (`id`),
+  KEY `problem_id` (`problem_id`),
+  CONSTRAINT `tests_ibfk_1` FOREIGN KEY (`problem_id`) REFERENCES `problems` (`id`) ON DELETE CASCADE
+) ENGINE=InnoDB AUTO_INCREMENT=13 DEFAULT CHARSET=utf8mb4;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -331,6 +334,7 @@ CREATE TABLE `tests` (
 
 LOCK TABLES `tests` WRITE;
 /*!40000 ALTER TABLE `tests` DISABLE KEYS */;
+INSERT INTO `tests` VALUES (1,27,0,0,0,1543162558),(2,27,0,0,0,1543162600),(3,27,0,0,0,1543162638),(4,27,0,0,0,1543163331),(5,27,0,0,0,1543163577),(6,27,0,0,0,1543163599),(7,27,0,0,0,1543163632),(8,27,0,0,0,1543163640),(9,27,0,0,0,1543163650),(10,27,1,0,0,1543163783),(11,27,1,0,0,1543163816),(12,27,1,0,0,1543163920);
 /*!40000 ALTER TABLE `tests` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -432,4 +436,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2018-11-25 22:44:46
+-- Dump completed on 2018-11-25 23:39:29

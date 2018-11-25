@@ -69,6 +69,10 @@ func DeleteProblemTestCaseDir(problemId int64) {
 	os.RemoveAll(Config.TestCaseDir + "/problem_" + strconv.Itoa(intId))
 }
 
+func GetProblemDir(problemId int64) (string) {
+	intId := int(problemId)
+	return Config.TestCaseDir + "/problem_" + strconv.Itoa(intId)
+}
 func (p *Problem) Save() (error) {
 
 	var fileId *int64

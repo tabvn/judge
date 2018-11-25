@@ -15,5 +15,6 @@ func AppRouters(router *mux.Router) {
 	router.HandleFunc("/api/problems/{id:[0-9]+}", HandleDeleteProblem).Methods("DELETE")
 	router.HandleFunc("/api/files", HandleUpload).Methods("POST")
 	router.HandleFunc("/api/files/{id:[0-9]+}", HandleDeleteFile).Methods("DELETE")
+	router.HandleFunc("/api/problems/{id:[0-9]+}/tests", HandleCreateTestCase).Methods("POST")
 
 }

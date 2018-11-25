@@ -230,3 +230,31 @@ func HandleDeleteFile(w http.ResponseWriter, r *http.Request) {
 	w.Write(res)
 
 }
+
+func HandleCreateTestCase(w http.ResponseWriter, r *http.Request) {
+
+	params := mux.Vars(r)
+	problemId := GetId(params["id"])
+
+	var t TestCase
+
+	e := json.NewDecoder(r.Body).Decode(&t)
+	if e != nil {
+		HandleErrorResponse(w, ErrorResponse{error: e.Error(), code: http.StatusBadRequest})
+		return
+	}
+
+	t.ProblemID = problemId
+
+	err := t.Create()
+
+	if err != nil {
+		HandleErrorResponse(w, ErrorResponse{error: err.Error(), code: http.StatusBadRequest})
+
+		return
+	}
+
+	w.Header().Set("Content-Type", "application/json")
+	json.NewEncoder(w).Encode(t)
+
+}

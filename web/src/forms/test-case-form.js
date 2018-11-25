@@ -12,16 +12,28 @@ export default class TestCaseForm extends React.Component {
       {
         name: 'input',
         title: 'Input',
-        type: 'textarea',
+        component: 'textarea',
         placeholder: '',
         rows: 3,
       },
       {
         name: 'output',
         title: 'Output',
-        type: 'textarea',
+        component: 'textarea',
         placeholder: '',
         rows: 3,
+      },
+      {
+        name: 'strength',
+        title: 'Strength',
+        type: 'input',
+        placeholder: '',
+      },
+      {
+        name: 'sample',
+        title: 'Sample',
+        placeholder: '',
+        type: 'checkbox'
       },
 
     ]
@@ -30,6 +42,7 @@ export default class TestCaseForm extends React.Component {
         initialValues={{
           input: _.get(values, 'input', ''),
           output: _.get(values, 'output', ''),
+          strength: _.get(values, 'strength', 10)
         }}
         onSubmit={values => {
           if (onSubmit) {
@@ -45,8 +58,11 @@ export default class TestCaseForm extends React.Component {
                   <div key={index} className="form-group">
                     <label htmlFor={f.name}>{f.title}</label>
                     <Field
-                      rows={_.get(f, 'rows')} component={_.get(f, 'type', 'input')}
-                      className={classNames('form-control', {'is-invalid': _.get(errors, f.name)})} name={f.name}
+                      type={_.get(f, 'type', 'text')}
+                      rows={_.get(f, 'rows')}
+                      component={_.get(f, 'component', 'input')}
+                      className={classNames({'form-control': _.get(f, 'type') !== 'checkbox'}, {'is-invalid': _.get(errors, f.name)})}
+                      name={f.name}
                       placeholder={_.get(f, 'placeholder')}/>
                     <ErrorMessage
                       name={f.name}
