@@ -184,6 +184,27 @@ func HandleUpdateProblem(w http.ResponseWriter, r *http.Request) {
 
 }
 
+func HandleDeleteProblem(w http.ResponseWriter, r *http.Request) {
+
+	if !auth("delete_problem", r) {
+		HandleErrorResponse(w, ErrorResponse{error: "access denied", code: http.StatusForbidden})
+		return
+	}
+
+	params := mux.Vars(r)
+	problemId := GetId(params["id"])
+
+	err := DeleteProblem(problemId)
+	if err != nil {
+		HandleErrorResponse(w, ErrorResponse{error: err.Error(), code: http.StatusBadRequest})
+	}
+
+	w.Header().Set("Content-Type", "application/json")
+	res := []byte("{\"success\": \"true\"}")
+	w.Write(res)
+
+}
+
 func HandleUpload(w http.ResponseWriter, r *http.Request) {
 
 	userId := getUserIdFromRequest(r)

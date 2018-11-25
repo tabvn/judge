@@ -1,4 +1,4 @@
-import { SET_PROBLEM } from '../types'
+import { REMOVE_PROBLEM, SET_PROBLEM } from '../types'
 import { setError } from '.'
 
 /**
@@ -82,6 +82,29 @@ export const updateProblem = (problem) => {
       return service.put(`api/problems/${problem.id}`, problem).then((data) => {
         dispatch(setProblem(data))
         return resolve(data)
+      }).catch((e) => {
+        setError(e)
+        return reject(e)
+      })
+    })
+  }
+}
+
+export const deleteProblem = (id) => {
+
+  return (dispatch, getState, {service}) => {
+
+    return new Promise((resolve, reject) => {
+
+      return service.delete(`api/problems/${id}`).then((data) => {
+
+        dispatch({
+          type: REMOVE_PROBLEM,
+          payload: id
+        })
+
+        return resolve(data)
+
       }).catch((e) => {
         setError(e)
         return reject(e)

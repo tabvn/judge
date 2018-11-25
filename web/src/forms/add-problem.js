@@ -23,7 +23,7 @@ export default class AddProblemForm extends React.Component {
   }
 
   render () {
-    const {onSubmit, submitTitle, values, file} = this.props
+    const {onSubmit, submitTitle, values, file, isEdit, onDelete} = this.props
     const _this = this
 
     const fields = [
@@ -114,6 +114,13 @@ export default class AddProblemForm extends React.Component {
               })
             }
             <button className={'btn btn-primary'} type="submit">{submitTitle ? submitTitle : 'Create'}</button>
+            {
+              isEdit ? <button type={'button'} onClick={() => {
+                if (onDelete) {
+                  onDelete()
+                }
+              }} className={'btn btn-danger ml-4'}>Delete</button> : null
+            }
           </Form>
         )}
       />

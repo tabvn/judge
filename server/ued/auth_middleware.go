@@ -55,6 +55,10 @@ func auth(name string, r *http.Request) (bool) {
 		params := mux.Vars(r)
 		return role == "admin" || userId == GetId(params["id"])
 
+	case "delete_problem":
+	case "create_problem":
+		return role == "admin"
+
 	default:
 		return true
 	}

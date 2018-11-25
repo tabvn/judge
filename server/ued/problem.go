@@ -49,13 +49,24 @@ func (p *Problem) Create() (error) {
 
 	// create sub dir in testcase
 	if id > 0 {
-		intId := int(id)
-		defer os.Mkdir(Config.TestCaseDir+"/problem_"+strconv.Itoa(intId), os.ModeDir)
+		defer CreateProblemTestCaseDir(id)
 
 	}
 
 	p.ID = id
 	return nil
+}
+
+func CreateProblemTestCaseDir(problemId int64) {
+
+	intId := int(problemId)
+	os.Mkdir(Config.TestCaseDir+"/problem_"+strconv.Itoa(intId), 0755)
+	os.Mkdir(Config.TestCaseDir+"/problem_"+strconv.Itoa(intId)+"/input", 0755)
+	os.Mkdir(Config.TestCaseDir+"/problem_"+strconv.Itoa(intId)+"/output", 0755)
+}
+func DeleteProblemTestCaseDir(problemId int64) {
+	intId := int(problemId)
+	os.RemoveAll(Config.TestCaseDir + "/problem_" + strconv.Itoa(intId))
 }
 
 func (p *Problem) Save() (error) {
@@ -69,6 +80,20 @@ func (p *Problem) Save() (error) {
 
 	_, err := DB.Update("UPDATE problems SET file_id =?, title=?, description=?, input=?, output=? WHERE id=?", fileId, p.Title, p.Description, p.Input, p.Output, p.ID)
 	return err
+}
+
+func DeleteProblem(problemId int64) (error) {
+
+	id, err := DB.Delete("DELETE FROM problems WHERE id=?", problemId)
+	if err != nil {
+		return err
+	}
+	if id > 0 {
+
+		defer DeleteProblemTestCaseDir(problemId)
+	}
+
+	return nil
 }
 
 func GetProblem(problemId int64) (*Problem) {

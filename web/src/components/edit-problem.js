@@ -3,10 +3,11 @@ import { bindActionCreators } from 'redux'
 import { connect } from 'react-redux'
 import Layout from '../layout/layout'
 import AddProblemForm from '../forms/add-problem'
-import { deleteProblemFile, getProblem, updateProblem } from '../redux/actions'
+import { deleteProblemFile, getProblem, updateProblem, deleteProblem } from '../redux/actions'
 import _ from 'lodash'
 import classNames from 'classnames'
 import TestCase from './testcase'
+import { history } from '../hostory'
 
 class EditProblem extends React.Component {
 
@@ -36,6 +37,12 @@ class EditProblem extends React.Component {
     const {problem} = this.props
     return problem ? (
       <AddProblemForm
+        onDelete={() => {
+          this.props.deleteProblem(problem.id).then(() => {
+            history.push('/')
+          })
+        }}
+        isEdit={true}
         submitTitle={'Save'}
         values={problem}
         onFileRemove={(file) => {
@@ -81,7 +88,7 @@ class EditProblem extends React.Component {
               }, 3000)
             })
           }).catch(e => {
-            
+
             this.setState({
               ...this.state,
               alert: {
@@ -165,6 +172,7 @@ const mapDispatchToProps = (dispatch) => bindActionCreators({
   getProblem,
   deleteProblemFile,
   updateProblem,
+  deleteProblem,
   upload: (file) => {
     return (dispatch, getState, {service}) => {
       return service.upload('api/files', file)

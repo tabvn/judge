@@ -9,3 +9,4 @@ export const RELOAD = 'reload'
 
 // problem
 export const SET_PROBLEM = 'set_problem'
+export const REMOVE_PROBLEM = 'remove_problem'
