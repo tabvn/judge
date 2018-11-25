@@ -155,3 +155,57 @@ func HandleGetProblem(w http.ResponseWriter, r *http.Request) {
 	HandleErrorResponse(w, ErrorResponse{error: "Not found", code: http.StatusNotFound})
 
 }
+
+func HandleUpdateProblem(w http.ResponseWriter, r *http.Request) {
+
+	if !auth("update_problem", r) {
+		HandleErrorResponse(w, ErrorResponse{error: "access denied", code: http.StatusForbidden})
+		return
+	}
+
+	params := mux.Vars(r)
+	problemId := GetId(params["id"])
+
+	var problem Problem
+	err := json.NewDecoder(r.Body).Decode(&problem)
+	if err != nil {
+		HandleErrorResponse(w, ErrorResponse{error: err.Error(), code: http.StatusBadRequest})
+		return
+	}
+	problem.ID = problemId
+
+	if problem.Save() != nil {
+		HandleErrorResponse(w, ErrorResponse{error: "an error saving problem", code: http.StatusBadRequest})
+		return
+	}
+
+	w.Header().Set("Content-Type", "application/json")
+	json.NewEncoder(w).Encode(problem)
+
+}
+
+func HandleUpload(w http.ResponseWriter, r *http.Request) {
+
+	userId := getUserIdFromRequest(r)
+
+	Upload(userId, w, r)
+}
+
+func HandleDeleteFile(w http.ResponseWriter, r *http.Request) {
+	if !auth("delete_file", r) {
+		HandleErrorResponse(w, ErrorResponse{error: "access denied", code: http.StatusUnauthorized})
+		return
+	}
+	params := mux.Vars(r)
+	fileId := GetId(params["id"])
+
+	err := DeleteFile(fileId)
+	if err != nil {
+		HandleErrorResponse(w, ErrorResponse{error: err.Error(), code: http.StatusBadRequest})
+		return
+	}
+	w.Header().Set("Content-Type", "application/json")
+	res := []byte("{\"success\": \"true\"}")
+	w.Write(res)
+
+}

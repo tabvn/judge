@@ -3,26 +3,83 @@ import { bindActionCreators } from 'redux'
 import { connect } from 'react-redux'
 import Layout from '../layout/layout'
 import AddProblemForm from '../forms/add-problem'
-import { getProblem } from '../redux/actions'
+import { deleteProblemFile, getProblem, updateProblem } from '../redux/actions'
 import _ from 'lodash'
+import classNames from 'classnames'
 
 class EditProblem extends React.Component {
 
   state = {
     step: 'details',
+    file: null,
+    fileError: null,
+    alert: {
+      type: 'success',
+      message: null
+    }
   }
 
-  componentWillMount () {
+  componentDidMount () {
     const id = _.get(this.props, 'match.params.id')
     if (id) {
-      this.props.getProblem(id)
+      this.props.getProblem(id).then((p) => {
+        this.setState({
+          file: _.get(p, 'file')
+        })
+      })
     }
 
   }
 
   renderDetailsForm = () => {
     const {problem} = this.props
-    return problem ? <AddProblemForm values={problem} submitTitle={'Save'}/> : null
+    return problem ? (
+      <AddProblemForm
+        submitTitle={'Save'}
+        values={problem}
+        onFileRemove={(file) => {
+
+          this.props.deleteProblemFile(file).then(() => {
+            this.setState({
+              file: null
+            })
+          })
+        }}
+        file={this.state.file}
+        onUpload={(file) => {
+          this.props.upload(file).then((data) => {
+
+            this.setState({
+              file: data
+            })
+          }).catch((e) => {
+            this.setState({
+              fileError: e.toLocaleString()
+            })
+          })
+        }}
+        onSubmit={(values) => {
+          // handle update here
+          this.props.updateProblem(Object.assign(problem, values)).then(() => {
+            this.setState({
+              ...this.state,
+              alert: {
+                type: 'success',
+                message: 'Problem has been saved'
+              }
+            })
+          }).catch(e => {
+
+            this.setState({
+              ...this.state,
+              alert: {
+                type: 'error',
+                message: 'Problem could not be saved'
+              }
+            })
+          })
+        }}/>
+    ) : null
   }
 
   render () {
@@ -35,16 +92,19 @@ class EditProblem extends React.Component {
           <div className={'col-md-12'}>
             <div className="card">
               <div className="card-header">
-                Problem title
+                {_.get(this.props, 'problem.title', '')}
               </div>
               <div className="card-body">
+
+                {this.state.alert.message ? <div
+                  className={classNames('alert', {'alert-danger': this.state.alert.type === 'error'}, {'alert-success': this.state.alert.type === 'success'})}>{this.state.alert.message}</div> : null}
                 <div className={'pt-2 pb-3'}>
                   <ul className="nav nav-tabs">
                     <li className="nav-item">
-                      <button className="btn-link nav-link active">Details</button>
+                      <button className="btn btn-link nav-link active">Details</button>
                     </li>
                     <li className="nav-item">
-                      <button className="btn-link nav-link">Test cases</button>
+                      <button className="btn btn-link nav-link">Test cases</button>
                     </li>
                   </ul>
                 </div>
@@ -69,6 +129,13 @@ const mapStateToProps = (state, props) => ({
 
 const mapDispatchToProps = (dispatch) => bindActionCreators({
   getProblem,
+  deleteProblemFile,
+  updateProblem,
+  upload: (file) => {
+    return (dispatch, getState, {service}) => {
+      return service.upload('api/files', file)
+    }
+  }
 }, dispatch)
 
 export default connect(mapStateToProps, mapDispatchToProps)(EditProblem)

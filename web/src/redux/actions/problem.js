@@ -38,7 +38,11 @@ export const addProblem = (data) => {
   }
 }
 
-
+/**
+ * Get problem by ID
+ * @param id
+ * @returns {function(*=, *, {service: *}): Promise<any>}
+ */
 export const getProblem = (id) => {
 
   return (dispatch, getState, {service}) => {
@@ -53,6 +57,29 @@ export const getProblem = (id) => {
         dispatch(setError(e))
         return reject(e)
       })
+    })
+  }
+}
+
+/**
+ * Request delete file to service
+ * @param file
+ * @returns {Function}
+ */
+
+export const deleteProblemFile = (file) => {
+  return (dispatch, getState, {service}) => {
+    return service.delete(`api/files/${file.id}`)
+  }
+}
+
+export const updateProblem = (problem) => {
+
+  return (dispatch, getState, {service}) => {
+    return service.put(`api/problems/${problem.id}`, problem).then((data) => {
+      dispatch(setProblem(data))
+    }).catch((e) => {
+      setError(e)
     })
   }
 }

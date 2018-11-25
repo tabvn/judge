@@ -1,0 +1,5 @@
+{
+  "port": 8000,
+  "file_upload_dir": "./files",
+  "database_connect_url": "root:@tcp(127.0.0.1:3306)/ued?charset=utf8mb4&collation=utf8mb4_unicode_ci"
+}

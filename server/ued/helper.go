@@ -1,9 +1,11 @@
 package ued
 
 import (
+	"crypto/rand"
 	"strconv"
 	"net/http"
 	"time"
+	"fmt"
 )
 
 func GetId(s string) (int64) {
@@ -25,4 +27,10 @@ func getUserIdFromRequest(r *http.Request) (int64) {
 func RequestTime() (int64) {
 	return time.Now().Unix()
 
+}
+
+func randToken(len int) string {
+	b := make([]byte, len)
+	rand.Read(b)
+	return fmt.Sprintf("%x", b)
 }

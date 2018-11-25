@@ -3,11 +3,28 @@ import { Formik, Field, Form, ErrorMessage } from 'formik'
 import * as Yup from 'yup'
 import classNames from 'classnames'
 import _ from 'lodash'
+import ProblemFile from '../components/problem-file'
 
 export default class AddProblemForm extends React.Component {
 
+  state = {
+    file: null
+  }
+
+  onFileAdd = (e) => {
+    if (e.target.files.length && this.props.onUpload) {
+      this.props.onUpload(e.target.files[0])
+    }
+  }
+  onFileRemove = (file) => {
+    if (this.props.onFileRemove) {
+      this.props.onFileRemove(file)
+    }
+  }
+
   render () {
-    const {onSubmit, submitTitle, values} = this.props
+    const {onSubmit, submitTitle, values, file} = this.props
+    const _this = this
 
     const fields = [
       {
@@ -17,25 +34,31 @@ export default class AddProblemForm extends React.Component {
         placeholder: 'Problem title'
       },
       {
+        name: 'file',
+        title: 'PDF',
+        type: 'file',
+        placeholder: 'PDF',
+      },
+      {
         name: 'description',
         title: 'Problem description',
         type: 'textarea',
         placeholder: 'Problem description',
-        rows: 5,
+        rows: 3,
       },
       {
         name: 'input',
         title: 'Input format',
         type: 'textarea',
         placeholder: 'Input format',
-        rows: 3,
+        rows: 2,
       },
       {
         name: 'output',
         title: 'Output format',
         type: 'textarea',
         placeholder: 'Output format',
-        rows: 3,
+        rows: 2,
       }
 
     ]
@@ -55,6 +78,7 @@ export default class AddProblemForm extends React.Component {
         })}
         onSubmit={values => {
           if (onSubmit) {
+            values = _.setWith(values, 'file_id', _.get(file, 'id', null))
             onSubmit(values)
           }
 
@@ -64,17 +88,28 @@ export default class AddProblemForm extends React.Component {
             {
               fields.map((f, index) => {
                 return (
-                  <div key={index} className="form-group">
-                    <label htmlFor={f.name}>{f.title}</label>
-                    <Field rows={_.get(f, 'rows')} component={_.get(f, 'type', 'input')}
-                           className={classNames('form-control', {'is-invalid': _.get(errors, f.name)})} name={f.name}
-                           placeholder={_.get(f, 'placeholder')}/>
-                    <ErrorMessage
-                      name={f.name}
-                      component="small"
-                      className="field-error text-danger"
-                    />
-                  </div>
+                  f.type === 'file' ? (
+
+                    file ? <ProblemFile onRemove={() => _this.onFileRemove(file)} key={index} file={file}/> : (
+                      <div key={index} className="form-group">
+                        <label htmlFor={f.name}>{f.title}</label>
+                        <input onChange={_this.onFileAdd} className={'form-control-file'} type={'file'} name={f.name}/>
+                      </div>)
+                  ) : (
+
+                    <div key={index} className="form-group">
+                      <label htmlFor={f.name}>{f.title}</label>
+                      <Field
+                        rows={_.get(f, 'rows')} component={_.get(f, 'type', 'input')}
+                        className={classNames('form-control', {'is-invalid': _.get(errors, f.name)})} name={f.name}
+                        placeholder={_.get(f, 'placeholder')}/>
+                      <ErrorMessage
+                        name={f.name}
+                        component="small"
+                        className="field-error text-danger"
+                      />
+                    </div>
+                  )
                 )
               })
             }

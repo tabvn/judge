@@ -17,6 +17,11 @@ export default class Service {
     this.token = token
   }
 
+  /**
+   * Get Request
+   * @param path
+   * @returns {Promise<any>}
+   */
   get (path) {
 
     return new Promise((resolve, reject) => {
@@ -36,6 +41,12 @@ export default class Service {
     })
   }
 
+  /**
+   * Post Request to service
+   * @param path
+   * @param data
+   * @returns {Promise<any>}
+   */
   post (path, data) {
     return new Promise((resolve, reject) => {
       axios({
@@ -53,6 +64,71 @@ export default class Service {
       })
     })
 
+  }
+
+  put (path, data) {
+    return new Promise((resolve, reject) => {
+      axios({
+        url: `${api}/${path}`,
+        method: 'put',
+        headers: {
+          Authorization: this.getToken(),
+        },
+        withCredentials: true,
+        data: data,
+      }).then((result) => {
+        return resolve(result.data)
+      }).catch((e) => {
+        return reject(e)
+      })
+    })
+
+  }
+
+  /**
+   * Single file upload
+   * @param path
+   * @param file
+   * @returns {Promise<any>}
+   */
+  upload (path, file) {
+
+    const config = {
+      headers: {
+        Authorization: this.getToken(),
+      },
+      withCredentials: true,
+    }
+    let data = new FormData()
+
+    data.append('file', file)
+
+    return new Promise((resolve, reject) => {
+
+      axios.post(`${api}/${path}`, data, config).then((res) => {
+        return resolve(res.data)
+
+      }).catch((e) => {
+        return reject(e)
+      })
+
+    })
+  }
+
+  /**
+   * Delete request
+   * @param path
+   * @returns {AxiosPromise}
+   */
+  delete (path) {
+
+    const config = {
+      headers: {
+        Authorization: this.getToken(),
+      },
+      withCredentials: true,
+    }
+    return axios.delete(`${api}/${path}`, config)
   }
 
 }

@@ -4,6 +4,7 @@ import (
 	"net/http"
 	"fmt"
 	"context"
+	"github.com/gorilla/mux"
 )
 
 func Middleware(next http.Handler) http.Handler {
@@ -42,6 +43,21 @@ func auth(name string, r *http.Request) (bool) {
 	}
 	role := GetUserRole(userId)
 	fmt.Println("role", role)
+
+	// we may need implement permission via permissions table in db however time is limited
+	switch name {
+
+	case "delete_file":
+		// file we only allow admin role
+		return role == "admin"
+	case "update_user":
+		// allow admin or owner can update user info
+		params := mux.Vars(r)
+		return role == "admin" || userId == GetId(params["id"])
+
+	default:
+		return true
+	}
 
 	return true
 

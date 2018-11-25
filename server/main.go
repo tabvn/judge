@@ -8,11 +8,31 @@ import (
 	"errors"
 	"github.com/rs/cors"
 	"fmt"
+	"os"
+	"io/ioutil"
+	"encoding/json"
 )
 
+func configuration() {
+	configFile, err := os.Open("config.json")
+	if err != nil {
+		panic(err)
+		return
+	}
+
+	defer configFile.Close()
+	byteValue, _ := ioutil.ReadAll(configFile)
+
+	e := json.Unmarshal([]byte(byteValue), &ued.Config)
+	if e != nil {
+		panic(e)
+	}
+
+}
 func beforeRun() {
 
-	_, err := ued.InitDatabase("root:@tcp(127.0.0.1:3306)/ued?charset=utf8mb4&collation=utf8mb4_unicode_ci")
+	configuration()
+	_, err := ued.InitDatabase(ued.Config.DatabaseConnectURL)
 	if err != nil {
 		panic(errors.New("can not connect to database"))
 	}
@@ -27,7 +47,7 @@ func main() {
 	c := cors.New(cors.Options{
 		AllowedOrigins:   []string{"http://localhost:3000", "http://127.0.0.1:3000"},
 		AllowCredentials: true,
-		AllowedMethods:   []string{"POST", "GET", "OPTIONS"},
+		AllowedMethods:   []string{"POST", "GET", "OPTIONS","PUT", "DELETE"},
 		AllowedHeaders: []string{"Accept", "Content-Type", "Content-Length", "Accept-Encoding", "X-CSRF-Token", "Authorization",
 			"Access-Control-Allow-Credentials",
 			"Access-Control-Allow-Origin",

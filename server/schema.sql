@@ -99,6 +99,37 @@ LOCK TABLES `contests` WRITE;
 UNLOCK TABLES;
 
 --
+-- Table structure for table `files`
+--
+
+DROP TABLE IF EXISTS `files`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `files` (
+  `id` int(11) unsigned NOT NULL AUTO_INCREMENT,
+  `user_id` int(11) unsigned DEFAULT NULL,
+  `name` varchar(255) NOT NULL DEFAULT '',
+  `original_name` varchar(255) NOT NULL DEFAULT '',
+  `size` int(11) NOT NULL,
+  `type` varchar(50) NOT NULL DEFAULT '',
+  `created` int(11) NOT NULL DEFAULT '0',
+  PRIMARY KEY (`id`),
+  KEY `user_id` (`user_id`),
+  CONSTRAINT `files_ibfk_1` FOREIGN KEY (`user_id`) REFERENCES `users` (`id`) ON DELETE CASCADE
+) ENGINE=InnoDB AUTO_INCREMENT=29 DEFAULT CHARSET=utf8mb4;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `files`
+--
+
+LOCK TABLES `files` WRITE;
+/*!40000 ALTER TABLE `files` DISABLE KEYS */;
+INSERT INTO `files` VALUES (23,9,'db8c8dfd9100c083658dbd00_fairplay.pdf','fairplay.pdf',880252,'application/pdf',1543149659),(24,9,'9895cbcfb2a2bed63a26173e_fairplay.pdf','fairplay.pdf',880252,'application/pdf',1543150938),(25,9,'ff609989dc3b315d969ef3a6_fairplay.pdf','fairplay.pdf',880252,'application/pdf',1543151176),(28,9,'e605a8b9742cec92cbf14561_bakice.pdf','bakice.pdf',83846,'application/pdf',1543151824);
+/*!40000 ALTER TABLE `files` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
 -- Table structure for table `problems`
 --
 
@@ -112,11 +143,14 @@ CREATE TABLE `problems` (
   `description` longtext,
   `input` longtext,
   `output` longtext,
+  `file_id` int(11) unsigned DEFAULT NULL,
   `created` int(11) DEFAULT '0',
   PRIMARY KEY (`id`),
   KEY `user_id` (`user_id`),
-  CONSTRAINT `problems_ibfk_1` FOREIGN KEY (`user_id`) REFERENCES `users` (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=11 DEFAULT CHARSET=utf8mb4;
+  KEY `file_id` (`file_id`),
+  CONSTRAINT `problems_ibfk_1` FOREIGN KEY (`user_id`) REFERENCES `users` (`id`),
+  CONSTRAINT `problems_ibfk_2` FOREIGN KEY (`file_id`) REFERENCES `files` (`id`) ON DELETE SET NULL
+) ENGINE=InnoDB AUTO_INCREMENT=12 DEFAULT CHARSET=utf8mb4;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -125,7 +159,7 @@ CREATE TABLE `problems` (
 
 LOCK TABLES `problems` WRITE;
 /*!40000 ALTER TABLE `problems` DISABLE KEYS */;
-INSERT INTO `problems` VALUES (4,'Problem A',9,'','input example','test output',1543071019),(5,'Problem A',9,'','input example','test output',1543071021),(6,'Problem A',9,'','input example','test output',1543071026),(7,'Problem A',9,'','input example','test output',1543071055),(8,'fdsafdas',9,'fsadfas','fdsafa','',1543110607),(9,'Test problem',9,'desc','input','output',1543110627),(10,'Test problem',9,'details','Input format smple','Output format samples',1543114114);
+INSERT INTO `problems` VALUES (11,'Fairplay updated',9,'Desc','In','Out',28,1543149865);
 /*!40000 ALTER TABLE `problems` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -398,4 +432,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2018-11-25 10:31:46
+-- Dump completed on 2018-11-25 20:25:32
