@@ -4,6 +4,7 @@ import { connect } from 'react-redux'
 import Layout from '../layout/layout'
 import AddProblemForm from '../forms/add-problem'
 import { addProblem } from '../redux/actions'
+import { history } from '../hostory'
 
 class AddProblem extends React.Component {
 
@@ -24,8 +25,9 @@ class AddProblem extends React.Component {
               <div className="card-body">
                 {error ? <div className="alert alert-danger" role="alert">{error}</div> : null}
                 <AddProblemForm onSubmit={(values) => {
-                  console.log('values', values)
-                  this.props.addProblem(values).catch((e) => {
+                  this.props.addProblem(values).then((res) => {
+                    history.push(`/problems/${res.id}/edit`)
+                  }).catch((e) => {
                     this.setState({
                       error: e.toLocaleString()
                     })

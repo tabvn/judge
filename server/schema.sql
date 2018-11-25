@@ -116,7 +116,7 @@ CREATE TABLE `problems` (
   PRIMARY KEY (`id`),
   KEY `user_id` (`user_id`),
   CONSTRAINT `problems_ibfk_1` FOREIGN KEY (`user_id`) REFERENCES `users` (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=10 DEFAULT CHARSET=utf8mb4;
+) ENGINE=InnoDB AUTO_INCREMENT=11 DEFAULT CHARSET=utf8mb4;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -125,7 +125,7 @@ CREATE TABLE `problems` (
 
 LOCK TABLES `problems` WRITE;
 /*!40000 ALTER TABLE `problems` DISABLE KEYS */;
-INSERT INTO `problems` VALUES (4,'Problem A',9,'','input example','test output',1543071019),(5,'Problem A',9,'','input example','test output',1543071021),(6,'Problem A',9,'','input example','test output',1543071026),(7,'Problem A',9,'','input example','test output',1543071055),(8,'fdsafdas',9,'fsadfas','fdsafa','',1543110607),(9,'Test problem',9,'desc','input','output',1543110627);
+INSERT INTO `problems` VALUES (4,'Problem A',9,'','input example','test output',1543071019),(5,'Problem A',9,'','input example','test output',1543071021),(6,'Problem A',9,'','input example','test output',1543071026),(7,'Problem A',9,'','input example','test output',1543071055),(8,'fdsafdas',9,'fsadfas','fdsafa','',1543110607),(9,'Test problem',9,'desc','input','output',1543110627),(10,'Test problem',9,'details','Input format smple','Output format samples',1543114114);
 /*!40000 ALTER TABLE `problems` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -398,4 +398,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2018-11-25  9:37:38
+-- Dump completed on 2018-11-25 10:30:04

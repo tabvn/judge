@@ -3,6 +3,8 @@ import { bindActionCreators } from 'redux'
 import { connect } from 'react-redux'
 import Layout from '../layout/layout'
 import AddProblemForm from '../forms/add-problem'
+import { getProblem } from '../redux/actions'
+import _ from 'lodash'
 
 class EditProblem extends React.Component {
 
@@ -10,7 +12,21 @@ class EditProblem extends React.Component {
     step: 'details',
   }
 
+  componentWillMount () {
+    const id = _.get(this.props, 'match.params.id')
+    if (id) {
+      this.props.getProblem(id)
+    }
+
+  }
+
+  renderDetailsForm = () => {
+    const {problem} = this.props
+    return problem ? <AddProblemForm values={problem} submitTitle={'Save'}/> : null
+  }
+
   render () {
+
     return (
       <Layout admin={true}>
 
@@ -33,7 +49,8 @@ class EditProblem extends React.Component {
                   </ul>
                 </div>
                 {
-                  this.state.step === 'details' ? <AddProblemForm submitTitle={'Save'}/> : (<div>hi</div>)
+                  this.state.step === 'details' ? this.renderDetailsForm() : (
+                    <div>hi</div>)
                 }
               </div>
             </div>
@@ -46,8 +63,12 @@ class EditProblem extends React.Component {
   }
 }
 
-const mapStateToProps = (state) => ({})
+const mapStateToProps = (state, props) => ({
+  problem: state.problem.models.get(parseInt(_.get(props, 'match.params.id', 0)))
+})
 
-const mapDispatchToProps = (dispatch) => bindActionCreators({}, dispatch)
+const mapDispatchToProps = (dispatch) => bindActionCreators({
+  getProblem,
+}, dispatch)
 
 export default connect(mapStateToProps, mapDispatchToProps)(EditProblem)

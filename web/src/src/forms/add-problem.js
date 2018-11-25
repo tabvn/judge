@@ -8,6 +8,7 @@ export default class AddProblemForm extends React.Component {
 
   render () {
     const {onSubmit, submitTitle, values} = this.props
+    
     const fields = [
       {
         name: 'title',
@@ -19,21 +20,22 @@ export default class AddProblemForm extends React.Component {
         name: 'description',
         title: 'Problem description',
         type: 'textarea',
-        placeholder: 'Problem description'
+        placeholder: 'Problem description',
+        rows: 5,
       },
       {
         name: 'input',
         title: 'Input format',
         type: 'textarea',
         placeholder: 'Input format',
-        rows: 5,
+        rows: 3,
       },
       {
         name: 'output',
         title: 'Output format',
         type: 'textarea',
         placeholder: 'Output format',
-        rows: 5,
+        rows: 3,
       }
 
     ]

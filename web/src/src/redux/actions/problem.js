@@ -37,3 +37,22 @@ export const addProblem = (data) => {
     })
   }
 }
+
+
+export const getProblem = (id) => {
+
+  return (dispatch, getState, {service}) => {
+    return new Promise((resolve, reject) => {
+
+      service.get(`api/problems/${id}`).then((res) => {
+
+        dispatch(setProblem(res))
+
+        return resolve(res)
+      }).catch(e => {
+        dispatch(setError(e))
+        return reject(e)
+      })
+    })
+  }
+}
