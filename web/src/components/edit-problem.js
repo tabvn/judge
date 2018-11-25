@@ -6,6 +6,7 @@ import AddProblemForm from '../forms/add-problem'
 import { deleteProblemFile, getProblem, updateProblem } from '../redux/actions'
 import _ from 'lodash'
 import classNames from 'classnames'
+import TestCase from './testcase'
 
 class EditProblem extends React.Component {
 
@@ -83,7 +84,18 @@ class EditProblem extends React.Component {
   }
 
   render () {
+    const id = _.get(this.props, 'match.params.id')
 
+    const tabs = [
+      {
+        title: 'Details',
+        name: 'details',
+      },
+      {
+        title: 'Test cases',
+        name: 'test'
+      }
+    ]
     return (
       <Layout admin={true}>
 
@@ -100,17 +112,28 @@ class EditProblem extends React.Component {
                   className={classNames('alert', {'alert-danger': this.state.alert.type === 'error'}, {'alert-success': this.state.alert.type === 'success'})}>{this.state.alert.message}</div> : null}
                 <div className={'pt-2 pb-3'}>
                   <ul className="nav nav-tabs">
-                    <li className="nav-item">
-                      <button className="btn btn-link nav-link active">Details</button>
-                    </li>
-                    <li className="nav-item">
-                      <button className="btn btn-link nav-link">Test cases</button>
-                    </li>
+                    {
+                      tabs.map((tab, index) => {
+                        return (
+                          <li key={index} className="nav-item">
+                            <button
+                              onClick={() => {
+                                this.setState({
+                                  ...this.state,
+                                  step: tab.name,
+                                })
+
+                              }}
+                              className={classNames('btn btn-link nav-link', {'active': this.state.step === tab.name})}>{tab.title}
+                            </button>
+                          </li>
+                        )
+                      })
+                    }
                   </ul>
                 </div>
                 {
-                  this.state.step === 'details' ? this.renderDetailsForm() : (
-                    <div>hi</div>)
+                  this.state.step === 'details' ? this.renderDetailsForm() : (<TestCase id={id}/>)
                 }
               </div>
             </div>
