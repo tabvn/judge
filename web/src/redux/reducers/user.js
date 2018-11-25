@@ -1,4 +1,4 @@
-import { OrderedMap } from 'immutable/dist/immutable'
+import { OrderedMap } from 'immutable'
 import { REMOVE_USER, SET_USER } from '../types'
 
 const initState = {

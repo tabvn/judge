@@ -5,6 +5,7 @@ import EditUser from './components/edit-user'
 import Register from './components/register'
 import AccessDenied from './components/access-denied'
 import AddProblem from './components/add-problem'
+import EditProblem from './components/edit-problem'
 
 export const routes = [
   {
@@ -14,6 +15,10 @@ export const routes = [
   {
     path: '/problems/add',
     component: AddProblem
+  },
+  {
+    path: '/problems/:id/edit',
+    component: EditProblem
   },
   {
     path: '/users/:id/edit',

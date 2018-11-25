@@ -8,7 +8,7 @@ export default class AddProblemForm extends React.Component {
 
   render () {
     const {onSubmit, submitTitle, values} = this.props
-    
+
     const fields = [
       {
         name: 'title',

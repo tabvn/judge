@@ -6,3 +6,6 @@ export const SET_ERROR = 'set_error'
 export const SET_APP_DATA = 'set_app_data'
 export const LOGOUT = 'logout'
 export const RELOAD = 'reload'
+
+// problem
+export const SET_PROBLEM = 'set_problem'
