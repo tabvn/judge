@@ -2,6 +2,7 @@ import React from 'react'
 import { bindActionCreators } from 'redux'
 import { connect } from 'react-redux'
 import styled from 'styled-components'
+import TestCaseForm from '../forms/test-case-form'
 
 const Button = styled.button`
   border: 0 none;
@@ -21,10 +22,21 @@ const Strength = styled.input`
 
 class TestCase extends React.Component {
 
-  render () {
-    return (
-      <div className={'test-cases'}>
+  state = {
+    addTestCase: false
+  }
 
+  renderTable () {
+    return (
+      <div>
+        <div className={'pt-3 pb-3'}>
+          <button onClick={() => {
+            this.setState({
+              addTestCase: true
+            })
+          }} type={'button'} className={'btn btn-primary'}>Add test case
+          </button>
+        </div>
         <table className="table">
           <thead>
           <tr>
@@ -51,6 +63,22 @@ class TestCase extends React.Component {
           </tr>
           </tbody>
         </table>
+      </div>
+    )
+  }
+
+  render () {
+    return (
+      <div className={'test-cases'}>
+
+        {
+          this.state.addTestCase ? <TestCaseForm onCancel={() => {
+              this.setState({
+                addTestCase: false
+              })
+            }} submitTitle={'Save'}/>
+            : this.renderTable()
+        }
 
       </div>)
   }

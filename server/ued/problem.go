@@ -4,6 +4,8 @@ import (
 	"encoding/json"
 	"fmt"
 	"database/sql"
+	"os"
+	"strconv"
 )
 
 func UnmarshalProblem(data []byte) (Problem, error) {
@@ -31,17 +33,41 @@ type Problem struct {
 func (p *Problem) Create() (error) {
 
 	p.Created = RequestTime()
-	id, err := DB.Insert("INSERT INTO problems (user_id, file_id, title, description, input, output, created) VALUES (?, ?, ?, ?, ?, ?, ?)", p.UserID, p.FileID, p.Title, p.Description, p.Input, p.Output, p.Created)
+
+	var fileId *int64
+	if p.FileID > 0 {
+		fileId = &p.FileID
+	} else {
+		fileId = nil
+	}
+
+	id, err := DB.Insert("INSERT INTO problems (user_id, file_id, title, description, input, output, created) VALUES (?, ?, ?, ?, ?, ?, ?)", p.UserID, fileId, p.Title, p.Description, p.Input, p.Output, p.Created)
 	if err != nil {
+		fmt.Println("e", err, p.FileID)
 		return err
 	}
-	p.ID = id
 
+	// create sub dir in testcase
+	if id > 0 {
+		intId := int(id)
+		defer os.Mkdir(Config.TestCaseDir+"/problem_"+strconv.Itoa(intId), os.ModeDir)
+
+	}
+
+	p.ID = id
 	return nil
 }
 
 func (p *Problem) Save() (error) {
-	_, err := DB.Update("UPDATE problems SET file_id =?, title=?, description=?, input=?, output=? WHERE id=?", p.FileID, p.Title, p.Description, p.Input, p.Output, p.ID)
+
+	var fileId *int64
+	if p.FileID > 0 {
+		fileId = &p.FileID
+	} else {
+		fileId = nil
+	}
+
+	_, err := DB.Update("UPDATE problems SET file_id =?, title=?, description=?, input=?, output=? WHERE id=?", fileId, p.Title, p.Description, p.Input, p.Output, p.ID)
 	return err
 }
 

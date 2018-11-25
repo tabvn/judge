@@ -68,9 +68,20 @@ class EditProblem extends React.Component {
                 type: 'success',
                 message: 'Problem has been saved'
               }
+            }, () => {
+
+              setTimeout(() => {
+                this.setState({
+                  ...this.state,
+                  alert: {
+                    type: 'success',
+                    message: null
+                  }
+                })
+              }, 3000)
             })
           }).catch(e => {
-
+            
             this.setState({
               ...this.state,
               alert: {

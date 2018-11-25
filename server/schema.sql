@@ -116,7 +116,7 @@ CREATE TABLE `files` (
   PRIMARY KEY (`id`),
   KEY `user_id` (`user_id`),
   CONSTRAINT `files_ibfk_1` FOREIGN KEY (`user_id`) REFERENCES `users` (`id`) ON DELETE CASCADE
-) ENGINE=InnoDB AUTO_INCREMENT=29 DEFAULT CHARSET=utf8mb4;
+) ENGINE=InnoDB AUTO_INCREMENT=35 DEFAULT CHARSET=utf8mb4;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -125,7 +125,7 @@ CREATE TABLE `files` (
 
 LOCK TABLES `files` WRITE;
 /*!40000 ALTER TABLE `files` DISABLE KEYS */;
-INSERT INTO `files` VALUES (23,9,'db8c8dfd9100c083658dbd00_fairplay.pdf','fairplay.pdf',880252,'application/pdf',1543149659),(24,9,'9895cbcfb2a2bed63a26173e_fairplay.pdf','fairplay.pdf',880252,'application/pdf',1543150938),(25,9,'ff609989dc3b315d969ef3a6_fairplay.pdf','fairplay.pdf',880252,'application/pdf',1543151176),(28,9,'e605a8b9742cec92cbf14561_bakice.pdf','bakice.pdf',83846,'application/pdf',1543151824);
+INSERT INTO `files` VALUES (23,9,'db8c8dfd9100c083658dbd00_fairplay.pdf','fairplay.pdf',880252,'application/pdf',1543149659),(24,9,'9895cbcfb2a2bed63a26173e_fairplay.pdf','fairplay.pdf',880252,'application/pdf',1543150938),(25,9,'ff609989dc3b315d969ef3a6_fairplay.pdf','fairplay.pdf',880252,'application/pdf',1543151176),(28,9,'e605a8b9742cec92cbf14561_bakice.pdf','bakice.pdf',83846,'application/pdf',1543151824),(29,9,'4850f05dbba2fa0cbebbd3d2_bakice.pdf','bakice.pdf',83846,'application/pdf',1543157581),(30,9,'f2240d0ee3b5b36d5763cb86_fairplay.pdf','fairplay.pdf',880252,'application/pdf',1543157657);
 /*!40000 ALTER TABLE `files` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -150,7 +150,7 @@ CREATE TABLE `problems` (
   KEY `file_id` (`file_id`),
   CONSTRAINT `problems_ibfk_1` FOREIGN KEY (`user_id`) REFERENCES `users` (`id`),
   CONSTRAINT `problems_ibfk_2` FOREIGN KEY (`file_id`) REFERENCES `files` (`id`) ON DELETE SET NULL
-) ENGINE=InnoDB AUTO_INCREMENT=12 DEFAULT CHARSET=utf8mb4;
+) ENGINE=InnoDB AUTO_INCREMENT=25 DEFAULT CHARSET=utf8mb4;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -159,7 +159,7 @@ CREATE TABLE `problems` (
 
 LOCK TABLES `problems` WRITE;
 /*!40000 ALTER TABLE `problems` DISABLE KEYS */;
-INSERT INTO `problems` VALUES (11,'Fairplay updated',9,'Desc','In','Out',28,1543149865);
+INSERT INTO `problems` VALUES (11,'Fairplay updated',9,'Desc','In','Out',28,1543149865),(12,'New problem',9,'','','',29,1543157584),(13,'Test problem',9,'','','',30,1543157657),(16,'aaaa',9,'','','',NULL,1543157790),(22,'fsdafsaf',9,'','','',NULL,1543158129),(23,'testdsafsafas',9,'','','',NULL,1543158679),(24,'fsafa',9,'','','',NULL,1543158692);
 /*!40000 ALTER TABLE `problems` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -432,4 +432,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2018-11-25 21:15:57
+-- Dump completed on 2018-11-25 22:15:28

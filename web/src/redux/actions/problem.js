@@ -76,10 +76,16 @@ export const deleteProblemFile = (file) => {
 export const updateProblem = (problem) => {
 
   return (dispatch, getState, {service}) => {
-    return service.put(`api/problems/${problem.id}`, problem).then((data) => {
-      dispatch(setProblem(data))
-    }).catch((e) => {
-      setError(e)
+
+    return new Promise((resolve, reject) => {
+
+      return service.put(`api/problems/${problem.id}`, problem).then((data) => {
+        dispatch(setProblem(data))
+        return resolve(data)
+      }).catch((e) => {
+        setError(e)
+        return reject(e)
+      })
     })
   }
 }
