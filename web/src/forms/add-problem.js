@@ -119,7 +119,7 @@ export default class AddProblemForm extends React.Component {
                 if (onDelete) {
                   onDelete()
                 }
-              }} className={'btn btn-danger ml-4'}>Delete</button> : null
+              }} className={'btn btn-danger ml-4'}>Delete this Problem?</button> : null
             }
           </Form>
         )}

@@ -13,7 +13,7 @@ class TestCaseForm extends React.Component {
   onCreate = (values) => {
 
     values.strength = parseInt(values.strength)
-    
+
     if (_.get(this.props.values, 'id')) {
       // update
       this.props.updateTestCase(Object.assign(this.props.values, values)).then(() => {
