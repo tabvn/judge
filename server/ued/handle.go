@@ -408,3 +408,31 @@ func HandleUpdateTestCase(w http.ResponseWriter, r *http.Request) {
 	json.NewEncoder(w).Encode(t)
 
 }
+
+func HandleCreateContest(w http.ResponseWriter, r *http.Request) {
+	if !auth("create_contest", r) {
+		HandleErrorResponse(w, ErrorResponse{error: "access denied", code: http.StatusUnauthorized})
+		return
+	}
+
+	var contest Contest
+
+	e := json.NewDecoder(r.Body).Decode(&contest)
+
+	if e != nil {
+		HandleErrorResponse(w, ErrorResponse{error: e.Error(), code: http.StatusBadRequest})
+		return
+	}
+
+
+	err := contest.Create()
+
+	if err != nil {
+		HandleErrorResponse(w, ErrorResponse{error: err.Error(), code: http.StatusBadRequest})
+		return
+	}
+
+	w.Header().Set("Content-Type", "application/json")
+	json.NewEncoder(w).Encode(contest)
+
+}

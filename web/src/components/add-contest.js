@@ -7,6 +7,8 @@ import DatePicker from 'react-datepicker'
 import 'react-datepicker/dist/react-datepicker.css'
 import classNames from 'classnames'
 import moment from 'moment'
+import { createContest } from '../redux/actions'
+import _ from 'lodash'
 
 class AddContest extends React.Component {
 
@@ -15,6 +17,7 @@ class AddContest extends React.Component {
     name: '',
     start: new Date(),
     end: moment().add(1, 'hours').toDate(),
+    scoreboard: true
   }
   onSubmit = (e) => {
     e.preventDefault()
@@ -24,6 +27,20 @@ class AddContest extends React.Component {
       })
     } else {
 
+      const data = {
+        name: _.trim(this.state.name),
+        start: moment(this.state.start).unix(),
+        end: moment(this.state.end).unix(),
+        scoreboard: this.state.scoreboard
+      }
+
+      this.props.createContest(data).then((res) => {
+        history.push(`/contests/${res.id}/edit`)
+      }).catch(e => {
+        this.setState({
+          error: e.toLocaleString()
+        })
+      })
     }
   }
 
@@ -48,8 +65,12 @@ class AddContest extends React.Component {
 
   handleOnChange = (e) => {
     const name = e.target.name
+    let value =  e.target.value
+    if(e.target.type === 'checkbox'){
+      value = !this.state[name]
+    }
     this.setState({
-      [name]: e.target.value,
+      [name]:value,
       error: null
     })
   }
@@ -109,6 +130,11 @@ class AddContest extends React.Component {
                   </div>
                 </div>
 
+                <div className="form-group form-check">
+                  <input name={'scoreboard'} onChange={this.handleOnChange} checked={this.state.scoreboard} type="checkbox" className="form-check-input" id="scoreboard" />
+                    <label className="form-check-label" htmlFor="scoreboard">Scoreboard</label>
+                </div>
+
                 <button className={'btn btn-primary'}>Create</button>
               </form>
 
@@ -121,6 +147,8 @@ class AddContest extends React.Component {
 
 const mapStateToProps = (state) => ({})
 
-const mapDispatchToProps = (dispatch) => bindActionCreators({}, dispatch)
+const mapDispatchToProps = (dispatch) => bindActionCreators({
+  createContest
+}, dispatch)
 
 export default connect(mapStateToProps, mapDispatchToProps)(AddContest)

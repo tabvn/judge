@@ -77,12 +77,13 @@ DROP TABLE IF EXISTS `contests`;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `contests` (
   `id` int(11) unsigned NOT NULL AUTO_INCREMENT,
-  `name` varchar(255) DEFAULT NULL,
-  `start` int(11) DEFAULT NULL,
-  `end` int(11) DEFAULT NULL,
+  `name` varchar(255) NOT NULL DEFAULT '',
+  `start` int(11) DEFAULT '0',
+  `end` int(11) DEFAULT '0',
   `scoreboard` tinyint(1) DEFAULT '1',
+  `created` int(11) NOT NULL DEFAULT '0',
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8mb4;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -91,6 +92,7 @@ CREATE TABLE `contests` (
 
 LOCK TABLES `contests` WRITE;
 /*!40000 ALTER TABLE `contests` DISABLE KEYS */;
+INSERT INTO `contests` VALUES (1,'fsdaf',1543269854,1543273454,1,1543270040),(2,'abc',1543270086,1543273686,1,1543270091),(3,'fff',1543270209,1543276800,1,1543270259);
 /*!40000 ALTER TABLE `contests` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -432,4 +434,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2018-11-26 17:31:52
+-- Dump completed on 2018-11-27  5:13:11
