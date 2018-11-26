@@ -3,6 +3,8 @@ import { bindActionCreators } from 'redux'
 import { connect } from 'react-redux'
 import styled from 'styled-components'
 import TestCaseForm from '../forms/test-case-form'
+import { loadTestCases, deleteTestCase, getTestCase } from '../redux/actions'
+import { api } from '../config'
 
 const Button = styled.button`
   border: 0 none;
@@ -23,10 +25,23 @@ const Strength = styled.input`
 class TestCase extends React.Component {
 
   state = {
-    addTestCase: false
+    addTestCase: false,
+    editTestCase: false
+  }
+
+  componentWillMount () {
+    const {models} = this.props
+
+    if (!models.size) {
+      this.props.loadTestCases(this.props.id)
+    }
+
   }
 
   renderTable () {
+
+    const {models} = this.props
+
     return (
       <div>
         <div className={'pt-3 pb-3'}>
@@ -50,17 +65,40 @@ class TestCase extends React.Component {
           </tr>
           </thead>
           <tbody>
-          <tr>
-            <th scope="row">1</th>
-            <td>link to input file</td>
-            <td>link to output file</td>
-            <td><Button><i className={'md-icon'}>check_box_outline_blank</i></Button></td>
-            <td><Strength className={'form-control'} type={'text'} defaultValue={0}/></td>
-            <td><Button><i className={'md-icon'}>check_box</i></Button></td>
-            <td>
-              <Button><i className={'md-icon'}>delete</i></Button>
-            </td>
-          </tr>
+          {
+            models.map((t, index) => {
+              return (
+                <tr key={index}>
+                  <th scope="row">{index + 1}</th>
+                  <td><a target={'blank'} href={`${api}/api/tests/${t.id}/input`}>input_{t.id}.txt</a></td>
+                  <td><a target={'blank'} href={`${api}/api/tests/${t.id}/output`}>ouput_{t.id}.txt</a></td>
+                  <td><Button><i className={'md-icon'}>{t.sample ? 'check_box' : 'check_box_outline_blank'}</i></Button>
+                  </td>
+                  <td><Strength className={'form-control'} type={'text'} defaultValue={t.strength}/></td>
+                  <td><Button><i className={'md-icon'}>{t.active ? 'check_box' : 'check_box_outline_blank'}</i></Button>
+                  </td>
+                  <td>
+                    <Button
+                      onClick={() => {
+
+                        this.props.getTestCase(t.id).then((data) => {
+                          this.setState({
+                            addTestCase: true,
+                            editTestCase: data
+                          })
+                        })
+
+                      }}
+                      title={'Edit'} className={'mr-2'} type={'button'}><i className={'md-icon'}>edit</i></Button>
+                    <Button onClick={() => {
+
+                      this.props.deleteTestCase(t.id)
+                    }} title={'Delete'} type={'button'}><i className={'md-icon'}>delete</i></Button>
+                  </td>
+                </tr>
+              )
+            })
+          }
           </tbody>
         </table>
       </div>
@@ -72,11 +110,23 @@ class TestCase extends React.Component {
       <div className={'test-cases'}>
 
         {
-          this.state.addTestCase ? <TestCaseForm onCancel={() => {
-              this.setState({
-                addTestCase: false
-              })
-            }} submitTitle={'Save'}/>
+          this.state.addTestCase ?
+            <TestCaseForm
+              values={this.state.editTestCase}
+              title={this.editTestCase ? 'Edit test case' : 'Create new test case'}
+              problemId={this.props.id}
+              onDone={() => {
+                this.setState({
+                  addTestCase: false,
+                  editTestCase: null
+                })
+              }}
+              onCancel={() => {
+                this.setState({
+                  addTestCase: false,
+                  editTestCase: null
+                })
+              }} submitTitle={'Save'}/>
             : this.renderTable()
         }
 
@@ -84,8 +134,14 @@ class TestCase extends React.Component {
   }
 }
 
-const mapStateToProps = (state) => ({})
+const mapStateToProps = (state, props) => ({
+  models: state.testcase.models.filter((t) => t.problem_id === parseInt(props.id)).valueSeq(),
+})
 
-const mapDispatchToProps = (dispatch) => bindActionCreators({}, dispatch)
+const mapDispatchToProps = (dispatch) => bindActionCreators({
+  loadTestCases,
+  deleteTestCase,
+  getTestCase
+}, dispatch)
 
 export default connect(mapStateToProps, mapDispatchToProps)(TestCase)

@@ -1,5 +1,6 @@
 {
   "port": 8000,
+  "logger_file": "./log.txt",
   "file_upload_dir": "./files",
   "test_case_dir": "./test_cases",
   "database_connect_url": "root:@tcp(127.0.0.1:3306)/ued?charset=utf8mb4&collation=utf8mb4_unicode_ci"

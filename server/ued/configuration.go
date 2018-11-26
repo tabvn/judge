@@ -17,6 +17,7 @@ type Configuration struct {
 	FileUploadDir      string `json:"file_upload_dir"`
 	DatabaseConnectURL string `json:"database_connect_url"`
 	TestCaseDir        string `json:"test_case_dir"`
+	LoggerFile         string `json:"logger_file"`
 }
 
 var Config Configuration

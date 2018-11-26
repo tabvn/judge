@@ -2,7 +2,6 @@ package ued
 
 import (
 	"net/http"
-	"fmt"
 	"context"
 	"github.com/gorilla/mux"
 )
@@ -18,8 +17,12 @@ func Middleware(next http.Handler) http.Handler {
 		auth := r.Header.Get("authorization")
 
 		if len(auth) == 0 {
-			http.Error(w, "access denied", http.StatusForbidden)
-			return
+			auth = GetCookie(r, "auth")
+			if len(auth) == 0 {
+				http.Error(w, "access denied", http.StatusForbidden)
+				return
+			}
+
 		}
 
 		token := GetToken(auth)
@@ -42,8 +45,6 @@ func auth(name string, r *http.Request) (bool) {
 		return false
 	}
 	role := GetUserRole(userId)
-	fmt.Println("role", role)
-
 	// we may need implement permission via permissions table in db however time is limited
 	switch name {
 
@@ -57,6 +58,12 @@ func auth(name string, r *http.Request) (bool) {
 
 	case "delete_problem":
 	case "create_problem":
+	case "test_cases":
+	case "view_test_case_file":
+	case "delete_test_case":
+	case "get_test_case":
+	case "update_test_case":
+
 		return role == "admin"
 
 	default:
