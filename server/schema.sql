@@ -77,15 +77,11 @@ DROP TABLE IF EXISTS `contests`;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `contests` (
   `id` int(11) unsigned NOT NULL AUTO_INCREMENT,
-  `use_id` int(11) unsigned NOT NULL,
   `name` varchar(255) DEFAULT NULL,
   `start` int(11) DEFAULT NULL,
   `end` int(11) DEFAULT NULL,
-  `description` longtext,
   `scoreboard` tinyint(1) DEFAULT '1',
-  PRIMARY KEY (`id`),
-  KEY `use_id` (`use_id`),
-  CONSTRAINT `contests_ibfk_1` FOREIGN KEY (`use_id`) REFERENCES `users` (`id`)
+  PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -150,7 +146,7 @@ CREATE TABLE `problems` (
   KEY `file_id` (`file_id`),
   CONSTRAINT `problems_ibfk_1` FOREIGN KEY (`user_id`) REFERENCES `users` (`id`),
   CONSTRAINT `problems_ibfk_2` FOREIGN KEY (`file_id`) REFERENCES `files` (`id`) ON DELETE SET NULL
-) ENGINE=InnoDB AUTO_INCREMENT=30 DEFAULT CHARSET=utf8mb4;
+) ENGINE=InnoDB AUTO_INCREMENT=31 DEFAULT CHARSET=utf8mb4;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -159,7 +155,7 @@ CREATE TABLE `problems` (
 
 LOCK TABLES `problems` WRITE;
 /*!40000 ALTER TABLE `problems` DISABLE KEYS */;
-INSERT INTO `problems` VALUES (11,'Fairplay updated',9,'Desc','In','Out',28,1543149865),(12,'New problem',9,'','','',29,1543157584),(13,'Test problem',9,'','','',30,1543157657),(16,'aaaa',9,'','','',NULL,1543157790),(22,'fsdafsaf',9,'','','',NULL,1543158129),(23,'testdsafsafas',9,'','','',NULL,1543158679),(24,'fsafa',9,'','','',NULL,1543158692),(27,'Tabvn',9,'fsfa','','',NULL,1543161201),(29,'ABC',9,'','','',32,1543207741);
+INSERT INTO `problems` VALUES (11,'Fairplay updated',9,'Desc','In','Out',28,1543149865),(12,'New problem',9,'','','',29,1543157584),(13,'Test problem',9,'','','',30,1543157657),(16,'aaaa',9,'','','',NULL,1543157790),(22,'fsdafsaf',9,'','','',NULL,1543158129),(23,'testdsafsafas',9,'','','',NULL,1543158679),(24,'fsafa',9,'','','',NULL,1543158692),(27,'Tabvn',9,'fsfa','','',NULL,1543161201),(29,'ABC',9,'','','',32,1543207741),(30,'bbbb',9,'','','',NULL,1543222738);
 /*!40000 ALTER TABLE `problems` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -325,7 +321,7 @@ CREATE TABLE `tests` (
   PRIMARY KEY (`id`),
   KEY `problem_id` (`problem_id`),
   CONSTRAINT `tests_ibfk_1` FOREIGN KEY (`problem_id`) REFERENCES `problems` (`id`) ON DELETE CASCADE
-) ENGINE=InnoDB AUTO_INCREMENT=34 DEFAULT CHARSET=utf8mb4;
+) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8mb4;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -334,6 +330,7 @@ CREATE TABLE `tests` (
 
 LOCK TABLES `tests` WRITE;
 /*!40000 ALTER TABLE `tests` DISABLE KEYS */;
+INSERT INTO `tests` VALUES (1,30,5,1,0,1543222767),(2,30,10,1,0,1543222880);
 /*!40000 ALTER TABLE `tests` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -435,4 +432,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2018-11-26 11:56:10
+-- Dump completed on 2018-11-26 17:31:52

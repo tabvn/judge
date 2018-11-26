@@ -12,3 +12,8 @@ export const SET_PROBLEM = 'set_problem'
 export const REMOVE_PROBLEM = 'remove_problem'
 export const SET_TEST_CASE = 'set_test_case'
 export const REMOVE_TEST_CASE = 'remove_test_case'
+
+// contest
+
+export const SET_CONTEST = 'set_contest'
+export const REMOVE_CONTEST = 'set_contest'

@@ -6,18 +6,6 @@ import TestCaseForm from '../forms/test-case-form'
 import { loadTestCases, deleteTestCase, getTestCase } from '../redux/actions'
 import { api } from '../config'
 
-const Button = styled.button`
-  border: 0 none;
-  outline: 0 none;
-  background: none;
-  padding: 0;
-  margin: 0;
-  cursor: pointer;
-  &.delete{
-    color: #212529;
-  }
-`
-
 const Strength = styled.input`
   width: 50px !important;
 `
@@ -49,7 +37,7 @@ class TestCase extends React.Component {
             this.setState({
               addTestCase: true
             })
-          }} type={'button'} className={'btn btn-primary'}>Add test case
+          }} type={'button'} className={'btn btn-link'}><i className={'md-icon float-left'}>add</i> Add test case
           </button>
         </div>
         <table className="table">
@@ -72,13 +60,13 @@ class TestCase extends React.Component {
                   <th scope="row">{index + 1}</th>
                   <td><a target={'blank'} href={`${api}/api/tests/${t.id}/input`}>input_{t.id}.txt</a></td>
                   <td><a target={'blank'} href={`${api}/api/tests/${t.id}/output`}>ouput_{t.id}.txt</a></td>
-                  <td><Button><i className={'md-icon'}>{t.sample ? 'check_box' : 'check_box_outline_blank'}</i></Button>
+                  <td><button className={'btn btn-link'}><i className={'md-icon'}>{t.sample ? 'check_box' : 'check_box_outline_blank'}</i></button>
                   </td>
                   <td><Strength className={'form-control'} type={'text'} defaultValue={t.strength}/></td>
-                  <td><Button><i className={'md-icon'}>{t.active ? 'check_box' : 'check_box_outline_blank'}</i></Button>
+                  <td><button className={'btn btn-link'}><i className={'md-icon'}>{t.active ? 'check_box' : 'check_box_outline_blank'}</i></button>
                   </td>
                   <td>
-                    <Button
+                    <button className={'btn btn-link mr-2'}
                       onClick={() => {
 
                         this.props.getTestCase(t.id).then((data) => {
@@ -89,11 +77,11 @@ class TestCase extends React.Component {
                         })
 
                       }}
-                      title={'Edit'} className={'mr-2'} type={'button'}><i className={'md-icon'}>edit</i></Button>
-                    <Button onClick={() => {
+                      title={'Edit'} type={'button'}><i className={'md-icon'}>edit</i></button>
+                    <button className={'btn btn-link'} onClick={() => {
 
                       this.props.deleteTestCase(t.id)
-                    }} title={'Delete'} type={'button'}><i className={'md-icon'}>delete</i></Button>
+                    }} title={'Delete'} type={'button'}><i className={'md-icon text-danger'}>delete</i></button>
                   </td>
                 </tr>
               )
