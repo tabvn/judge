@@ -6,6 +6,7 @@ import (
 	"net/http"
 	"time"
 	"fmt"
+	"encoding/json"
 )
 
 func GetId(s string) (int64) {
@@ -33,4 +34,24 @@ func randToken(len int) string {
 	b := make([]byte, len)
 	rand.Read(b)
 	return fmt.Sprintf("%x", b)
+}
+
+func GetFilterFromRequest(r *http.Request) (*Filter) {
+
+	filterQuery := r.URL.Query().Get("filter")
+	var filter Filter
+
+	filter.Limit = 50
+	filter.Offset = 0
+	filter.Search = ""
+
+	if filterQuery != "" {
+		err := json.Unmarshal([]byte(filterQuery), &filter)
+		if err != nil {
+			return nil
+		}
+
+	}
+
+	return &filter
 }

@@ -22,6 +22,9 @@ func AppRouters(router *mux.Router) {
 	router.HandleFunc("/api/tests/{id:[0-9]+}", HandleDeleteTestCase).Methods("DELETE")
 	router.HandleFunc("/api/tests/{id:[0-9]+}/input", HandleViewTestCaseInputFile).Methods("GET")
 	router.HandleFunc("/api/tests/{id:[0-9]+}/output", HandleViewTestCaseOutFile).Methods("GET")
+	router.HandleFunc("/api/contests/{id:[0-9]+}", HandleGetContest).Methods("GET")
+	router.HandleFunc("/api/contests/{id:[0-9]+}", HandleUpdateContest).Methods("PUT")
+	router.HandleFunc("/api/contests", HandleFindContests).Methods("GET")
 	router.HandleFunc("/api/contests", HandleCreateContest).Methods("POST")
 
 

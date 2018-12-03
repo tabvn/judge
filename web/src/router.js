@@ -9,7 +9,7 @@ import EditProblem from './components/edit-problem'
 import Problem from './components/problem'
 import AdminContests from './components/admin-contests'
 import AddContest from './components/add-contest'
-
+import EditContest from './components/edit-contest'
 export const routes = [
   {
     path: '/',
@@ -22,6 +22,14 @@ export const routes = [
   {
     path: '/contests/:contest_id/problems/:id',
     component: Auth(Problem)
+  },
+  {
+    path: '/contests',
+    component: Auth(Contests)
+  },
+  {
+    path: '/contest/:id/edit',
+    component: Auth(EditContest)
   },
   {
     path: '/admin/contests',

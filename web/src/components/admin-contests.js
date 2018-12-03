@@ -2,10 +2,26 @@ import React from 'react'
 import { bindActionCreators } from 'redux'
 import { connect } from 'react-redux'
 import Layout from '../layout/layout'
-import {history} from '../hostory'
+import { history } from '../hostory'
+import { findContests } from '../redux/actions'
+import moment from 'moment'
 
 class AdminContests extends React.Component {
+
+  componentWillMount () {
+    const filter = {
+      search: '',
+      limit: 50,
+      offset: 0,
+    }
+    this.props.findContests(filter)
+  }
+
   render () {
+
+    const {contests} = this.props
+    const DateFormat = 'DD/MM/YYYY, hh:mm A'
+
     return (
 
       <Layout admin={true}>
@@ -36,15 +52,25 @@ class AdminContests extends React.Component {
                 </tr>
                 </thead>
                 <tbody>
-                <tr>
-                  <th scope="row">1</th>
-                  <td>Test</td>
-                  <td>20/10/2018</td>
-                  <td>20/10/2018</td>
-                  <td>
-                    <button type={'button'} className={'btn btn-link'}><i className={'md-icon'}>edit</i></button>
-                  </td>
-                </tr>
+                {
+                  contests.map((c, key) => {
+                    return (
+                      <tr key={key}>
+                        <th scope="row">{c.id}</th>
+                        <td>{c.name}</td>
+
+                        <td>{moment.unix(c.start).format(DateFormat)}</td>
+                        <td>{moment.unix(c.end).format(DateFormat)}</td>
+                        <td>
+                          <button onClick={() => {
+                            history.push(`/contest/${c.id}/edit`)
+                          }} type={'button'} className={'btn btn-link'}><i className={'md-icon'}>edit</i></button>
+                        </td>
+                      </tr>
+                    )
+                  })
+                }
+
                 </tbody>
               </table>
 
@@ -57,8 +83,12 @@ class AdminContests extends React.Component {
   }
 }
 
-const mapStateToProps = (state) => ({})
+const mapStateToProps = (state) => ({
+  contests: state.contest.models.valueSeq()
+})
 
-const mapDispatchToProps = (dispatch) => bindActionCreators({}, dispatch)
+const mapDispatchToProps = (dispatch) => bindActionCreators({
+  findContests
+}, dispatch)
 
 export default connect(mapStateToProps, mapDispatchToProps)(AdminContests)

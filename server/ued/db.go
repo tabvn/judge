@@ -50,6 +50,12 @@ func InitDatabase(url string) (*Database, error) {
 	return DB, err
 }
 
+func (db *Database) List(query string, args ...interface{}) (*sql.Rows, error) {
+
+	rows, err := DB.conn.Query(query, args...)
+	return rows, err
+
+}
 
 func (db *Database) Query(query string, args interface{}) (*sql.Rows, error) {
 	return DB.conn.Query(query, args)

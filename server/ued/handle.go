@@ -424,7 +424,6 @@ func HandleCreateContest(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-
 	err := contest.Create()
 
 	if err != nil {
@@ -434,5 +433,58 @@ func HandleCreateContest(w http.ResponseWriter, r *http.Request) {
 
 	w.Header().Set("Content-Type", "application/json")
 	json.NewEncoder(w).Encode(contest)
+
+}
+
+func HandleFindContests(w http.ResponseWriter, r *http.Request) {
+
+	filter := GetFilterFromRequest(r)
+
+	items := FindContests(filter.Search, filter.Limit, filter.Offset)
+	w.Header().Set("Content-Type", "application/json")
+	json.NewEncoder(w).Encode(items)
+
+}
+
+
+
+func HandleGetContest(w http.ResponseWriter, r *http.Request) {
+
+	params := mux.Vars(r)
+	id := GetId(params["id"])
+
+	c := GetContest(id)
+
+	w.Header().Set("Content-Type", "application/json")
+	json.NewEncoder(w).Encode(c)
+
+}
+
+
+func HandleUpdateContest(w http.ResponseWriter, r *http.Request){
+
+	params := mux.Vars(r)
+	id := GetId(params["id"])
+
+
+	var c Contest
+	c.ID = id
+
+	e := json.NewDecoder(r.Body).Decode(&c)
+
+	if e != nil {
+		HandleErrorResponse(w, ErrorResponse{error: e.Error(), code: http.StatusBadRequest})
+		return
+	}
+
+	err := c.Update()
+	if err != nil {
+		HandleErrorResponse(w, ErrorResponse{error: err.Error(), code: http.StatusBadRequest})
+		return
+	}
+
+	w.Header().Set("Content-Type", "application/json")
+	json.NewEncoder(w).Encode(c)
+
 
 }
