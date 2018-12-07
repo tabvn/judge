@@ -149,3 +149,52 @@ func GetProblem(problemId int64) (*Problem) {
 	return &problem
 
 }
+
+func FindProblems(search string, limit int64, offset int64) ([]*Problem) {
+
+	var rows *sql.Rows
+	var err error
+
+	var list [] *Problem
+	like := "%" + search + "%"
+
+	if search == "" {
+		query := "SELECT id, user_id, title, description, input, output,file_id, created FROM problems ORDER BY created DESC LIMIT ? OFFSET ?"
+		rows, err = DB.List(query, limit, offset)
+	}
+
+	if search != "" {
+		query := "SELECT id, user_id, title, description, input, output, file_id, created FROM problems WHERE title like ? ORDER BY created DESC LIMIT ? OFFSET ?"
+		rows, err = DB.List(query, like, limit, offset)
+	}
+
+	if err != nil {
+		Logger(err.Error(), "find_problems")
+		return nil
+	}
+
+	defer rows.Close()
+
+	var title sql.NullString
+	var description sql.NullString
+	var input sql.NullString
+	var output sql.NullString
+	var fileId sql.NullInt64
+
+	for rows.Next() {
+		var p Problem
+		e := rows.Scan(&p.ID, &p.UserID, &title, &description, &input, &output, &fileId, &p.Created)
+		if e == nil {
+			p.Title = title.String
+			p.Description = description.String
+			p.Input = input.String
+			p.Output = output.String
+			p.FileID = fileId.Int64
+
+			list = append(list, &p)
+		}
+	}
+
+	return list
+
+}

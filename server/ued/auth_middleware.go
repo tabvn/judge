@@ -64,6 +64,8 @@ func auth(name string, r *http.Request) (bool) {
 	case "get_test_case":
 	case "update_test_case":
 	case "create_contest":
+	case "update_contest":
+	case "find_problems":
 		return role == "admin"
 
 	default:

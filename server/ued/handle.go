@@ -446,8 +446,6 @@ func HandleFindContests(w http.ResponseWriter, r *http.Request) {
 
 }
 
-
-
 func HandleGetContest(w http.ResponseWriter, r *http.Request) {
 
 	params := mux.Vars(r)
@@ -460,12 +458,24 @@ func HandleGetContest(w http.ResponseWriter, r *http.Request) {
 
 }
 
-
-func HandleUpdateContest(w http.ResponseWriter, r *http.Request){
+func HandleGetContestDetails(w http.ResponseWriter, r *http.Request) {
 
 	params := mux.Vars(r)
 	id := GetId(params["id"])
 
+	var c ContestDetails
+	c.Contest = GetContest(id)
+	c.ContestProblems = GetContestProblems(id)
+
+	w.Header().Set("Content-Type", "application/json")
+	json.NewEncoder(w).Encode(c)
+
+}
+
+func HandleUpdateContest(w http.ResponseWriter, r *http.Request) {
+
+	params := mux.Vars(r)
+	id := GetId(params["id"])
 
 	var c Contest
 	c.ID = id
@@ -486,5 +496,150 @@ func HandleUpdateContest(w http.ResponseWriter, r *http.Request){
 	w.Header().Set("Content-Type", "application/json")
 	json.NewEncoder(w).Encode(c)
 
+}
+
+func HandleGetContestProblems(w http.ResponseWriter, r *http.Request) {
+
+	params := mux.Vars(r)
+	contestId := GetId(params["id"])
+
+	problems := GetContestProblems(contestId)
+
+	w.Header().Set("Content-Type", "application/json")
+	if problems != nil {
+		json.NewEncoder(w).Encode(problems)
+		return
+	}
+
+	res := []byte("[]")
+	w.Write(res)
+
+}
+
+func HandleGetContestProblem(w http.ResponseWriter, r *http.Request) {
+	params := mux.Vars(r)
+	contestId := GetId(params["id"])
+	problemId := GetId(params["problem"])
+
+	c := GetContestProblemDetails(contestId, problemId)
+
+	if c == nil {
+		HandleErrorResponse(w, ErrorResponse{error: "not found", code: http.StatusBadRequest})
+		return
+	}
+
+	w.Header().Set("Content-Type", "application/json")
+	json.NewEncoder(w).Encode(c)
+
+}
+func HandleUpdateContestProblem(w http.ResponseWriter, r *http.Request) {
+
+	if !auth("update_contest", r) {
+		HandleErrorResponse(w, ErrorResponse{error: "access denied", code: http.StatusUnauthorized})
+		return
+	}
+
+	params := mux.Vars(r)
+	id := GetId(params["id"])
+
+	var contestProblem ContestProblem
+
+	err := json.NewDecoder(r.Body).Decode(&contestProblem)
+
+	if err != nil {
+		Logger(err.Error(), "decode_contest_problem")
+		HandleErrorResponse(w, ErrorResponse{error: err.Error(), code: http.StatusBadRequest})
+		return
+	}
+
+	contestProblem.ID = id
+
+	if contestProblem.Update() != nil {
+
+		HandleErrorResponse(w, ErrorResponse{error: "an error saving contest problem", code: http.StatusBadRequest})
+		return
+	}
+	w.Header().Set("Content-Type", "application/json")
+	json.NewEncoder(w).Encode(contestProblem)
+
+}
+
+func HandleDeleteContestProblem(w http.ResponseWriter, r *http.Request) {
+
+	if !auth("update_contest", r) {
+		HandleErrorResponse(w, ErrorResponse{error: "access denied", code: http.StatusUnauthorized})
+		return
+	}
+
+	params := mux.Vars(r)
+	id := GetId(params["id"])
+
+	if DeleteContestProblem(id) != nil {
+		HandleErrorResponse(w, ErrorResponse{error: "contest problem can not be deleted", code: http.StatusBadRequest})
+		return
+	}
+
+	w.Header().Set("Content-Type", "application/json")
+	res := []byte("{\"success\": \"true\"}")
+	w.Write(res)
+
+}
+
+func HandleFindProblems(w http.ResponseWriter, r *http.Request) {
+	if !auth("find_problems", r) {
+		HandleErrorResponse(w, ErrorResponse{error: "access denied", code: http.StatusUnauthorized})
+		return
+	}
+
+	filter := GetFilterFromRequest(r)
+
+	items := FindProblems(filter.Search, filter.Limit, filter.Offset)
+	w.Header().Set("Content-Type", "application/json")
+	json.NewEncoder(w).Encode(items)
+}
+
+func HandleAddContestProblem(w http.ResponseWriter, r *http.Request) {
+	if !auth("update_contest", r) {
+		HandleErrorResponse(w, ErrorResponse{error: "access denied", code: http.StatusUnauthorized})
+		return
+	}
+
+	params := mux.Vars(r)
+	id := GetId(params["id"])
+
+	var contestProblem ContestProblem
+
+	decodeErr := json.NewDecoder(r.Body).Decode(&contestProblem)
+	if decodeErr != nil {
+		HandleErrorResponse(w, ErrorResponse{error: decodeErr.Error(), code: http.StatusBadRequest})
+		return
+	}
+
+	contestProblem.ContestID = id
+	err := contestProblem.Create()
+	if err != nil {
+		HandleErrorResponse(w, ErrorResponse{error: err.Error(), code: http.StatusBadRequest})
+		return
+	}
+	w.Header().Set("Content-Type", "application/json")
+	json.NewEncoder(w).Encode(contestProblem)
+
+}
+
+func HandleGetProblemDocumentPDF(w http.ResponseWriter, r *http.Request) {
+	if !auth("view_problem_pdf", r) {
+		HandleErrorResponse(w, ErrorResponse{error: "access denied", code: http.StatusUnauthorized})
+		return
+	}
+
+	params := mux.Vars(r)
+	id := GetId(params["id"])
+
+	p := GetProblem(id)
+
+	fileName := p.File.Name
+	http.ServeFile(w, r, Config.FileUploadDir+"/"+fileName)
+
+	return
 
 }
