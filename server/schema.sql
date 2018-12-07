@@ -97,7 +97,7 @@ CREATE TABLE `contests` (
 
 LOCK TABLES `contests` WRITE;
 /*!40000 ALTER TABLE `contests` DISABLE KEYS */;
-INSERT INTO `contests` VALUES (1,'toan 1234',1543842067,1543845667,1,1,1543270040),(2,'toan 1234',1543842067,1543845667,1,1,1543270091),(3,'toan 1234',1543842067,1543845667,1,1,1543270259),(4,'toan 1234',1543842067,1543845667,1,1,1543842072),(5,'toan 1234',1544878867,1544885400,1,1,1543842117),(6,'toan 12345',1543841700,1543848000,1,1,1543846541),(7,'Test contest',1544006021,1544009621,1,1,1544006040);
+INSERT INTO `contests` VALUES (1,'The contest 4',1543842067,1543845667,1,1,1543270040),(2,'Contest 3',1543842067,1543845667,1,1,1543270091),(3,'Contest 2',1543842067,1543845667,1,1,1543270259),(4,'Contest 1',1543842067,1543845667,1,1,1543842072),(5,'Final Exam 2018',1544878867,1544885400,1,1,1543842117),(6,'Contest 5',1543841700,1543848000,1,1,1543846541),(7,'Test contest',1544006021,1544009621,1,1,1544006040);
 /*!40000 ALTER TABLE `contests` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -119,7 +119,7 @@ CREATE TABLE `files` (
   PRIMARY KEY (`id`),
   KEY `user_id` (`user_id`),
   CONSTRAINT `files_ibfk_1` FOREIGN KEY (`user_id`) REFERENCES `users` (`id`) ON DELETE CASCADE
-) ENGINE=InnoDB AUTO_INCREMENT=34 DEFAULT CHARSET=utf8mb4;
+) ENGINE=InnoDB AUTO_INCREMENT=35 DEFAULT CHARSET=utf8mb4;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -128,7 +128,7 @@ CREATE TABLE `files` (
 
 LOCK TABLES `files` WRITE;
 /*!40000 ALTER TABLE `files` DISABLE KEYS */;
-INSERT INTO `files` VALUES (23,9,'db8c8dfd9100c083658dbd00_fairplay.pdf','fairplay.pdf',880252,'application/pdf',1543149659),(24,9,'9895cbcfb2a2bed63a26173e_fairplay.pdf','fairplay.pdf',880252,'application/pdf',1543150938),(25,9,'ff609989dc3b315d969ef3a6_fairplay.pdf','fairplay.pdf',880252,'application/pdf',1543151176),(29,9,'4850f05dbba2fa0cbebbd3d2_bakice.pdf','bakice.pdf',83846,'application/pdf',1543157581),(30,9,'f2240d0ee3b5b36d5763cb86_fairplay.pdf','fairplay.pdf',880252,'application/pdf',1543157657),(31,9,'b3d7b40e1d66958aa014da6b_bakice.pdf','bakice.pdf',83846,'application/pdf',1543195386),(32,9,'67a7601bc6de27cc4286d11b_gomin.pdf','gomin.pdf',114804,'application/pdf',1543208000),(33,9,'c875a22a1c752955c14359e0_dethichuyentinolp2010.pdf','DethiChuyenTinOLP2010.pdf',170478,'application/pdf',1544089231);
+INSERT INTO `files` VALUES (23,9,'db8c8dfd9100c083658dbd00_fairplay.pdf','fairplay.pdf',880252,'application/pdf',1543149659),(24,9,'9895cbcfb2a2bed63a26173e_fairplay.pdf','fairplay.pdf',880252,'application/pdf',1543150938),(25,9,'ff609989dc3b315d969ef3a6_fairplay.pdf','fairplay.pdf',880252,'application/pdf',1543151176),(30,9,'f2240d0ee3b5b36d5763cb86_fairplay.pdf','fairplay.pdf',880252,'application/pdf',1543157657),(31,9,'b3d7b40e1d66958aa014da6b_bakice.pdf','bakice.pdf',83846,'application/pdf',1543195386),(32,9,'67a7601bc6de27cc4286d11b_gomin.pdf','gomin.pdf',114804,'application/pdf',1543208000),(33,9,'c875a22a1c752955c14359e0_dethichuyentinolp2010.pdf','DethiChuyenTinOLP2010.pdf',170478,'application/pdf',1544089231),(34,9,'a192d4b726b73c60bfb645da_th7.pdf','th7.pdf',461131,'application/pdf',1544174994);
 /*!40000 ALTER TABLE `files` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -162,7 +162,7 @@ CREATE TABLE `problems` (
 
 LOCK TABLES `problems` WRITE;
 /*!40000 ALTER TABLE `problems` DISABLE KEYS */;
-INSERT INTO `problems` VALUES (11,'Fairplay updated',9,'','In','Out',33,1543149865),(12,'New problem',9,'','','',29,1543157584),(13,'Test problem',9,'','','',30,1543157657),(16,'aaaa',9,'','','',NULL,1543157790),(22,'fsdafsaf',9,'','','',NULL,1543158129),(23,'testdsafsafas',9,'','','',NULL,1543158679),(24,'fsafa',9,'','','',NULL,1543158692),(27,'Tabvn',9,'','','',NULL,1543161201),(29,'ABC',9,'','','',32,1543207741),(30,'bbbb',9,'','','',NULL,1543222738);
+INSERT INTO `problems` VALUES (11,'Fairplay updated',9,'','In','Out',33,1543149865),(12,'New problem',9,'','','',34,1543157584),(13,'Test problem',9,'','','',30,1543157657),(16,'aaaa',9,'','','',NULL,1543157790),(22,'fsdafsaf',9,'','','',NULL,1543158129),(23,'testdsafsafas',9,'','','',NULL,1543158679),(24,'fsafa',9,'','','',NULL,1543158692),(27,'Tabvn',9,'','','',NULL,1543161201),(29,'ABC',9,'','','',32,1543207741),(30,'bbbb',9,'','','',NULL,1543222738);
 /*!40000 ALTER TABLE `problems` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -439,4 +439,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2018-12-07 15:53:33
+-- Dump completed on 2018-12-07 16:31:37

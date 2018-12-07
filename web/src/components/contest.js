@@ -5,6 +5,7 @@ import Layout from '../layout/layout'
 import _ from 'lodash'
 import { history } from '../hostory'
 import classNames from 'classnames'
+import moment from 'moment'
 
 class Contest extends React.Component {
   state = {
@@ -73,6 +74,15 @@ class Contest extends React.Component {
       problems = []
     }
 
+    const endTime = _.get(contest, 'contest.end', 0)
+    const isEnded = moment().unix() > parseInt(endTime)
+
+    const timeLeft = moment.unix(endTime) - moment().unix()
+
+
+
+
+
     return (
       <Layout breadcrumb={breadcrumb} fullWidth={true}>
         {this.state.error ? <div className="alert alert-danger" role="alert">
@@ -122,6 +132,14 @@ class Contest extends React.Component {
           </div>
           <div className={'col-md-3'}>
             <h3 className={'mt-3 mb-3'}>{_.get(contest, 'contest.name', '')}</h3>
+            {
+              isEnded ? <div>Contest is Finished</div> : (
+                <div>
+                  Time left: {moment.unix(timeLeft).format('hh:mm:ss')}
+                </div>
+              )
+            }
+
           </div>
 
 
